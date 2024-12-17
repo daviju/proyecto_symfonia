@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ver Pregunta{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-4 text-primary">Ver Pregunta</h1>
+            <div>
+                <a href="{{ path('admin_preguntas_edit', { id: pregunta.id }) }}" class="btn btn-warning btn-lg shadow me-2">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </a>
+                <a href="{{ path('admin_preguntas') }}" class="btn btn-secondary btn-lg shadow">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">{{ pregunta.titulo }}</h3>
+                <p class="card-text">
+                    <strong>Fecha Inicio:</strong> {{ pregunta.fechaInicio|date('d-m-Y H:i') }}<br>
+                    <strong>Fecha Fin:</strong> 
+                    {% if pregunta.fechaFin %}
+                        {{ pregunta.fechaFin|date('d-m-Y H:i') }}
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Sin fecha fin</span>
+                    {% endif %}
+                </p>
+
+                <h4 class="mt-4">Respuestas</h4>
+                <ul class="list-group">
+                    {% if pregunta.r1 %}
+                        <li class="list-group-item">{{ pregunta.r1 }}</li>
+                    {% endif %}
+                    {% if pregunta.r2 %}
+                        <li class="list-group-item">{{ pregunta.r2 }}</li>
+                    {% endif %}
+                    {% if pregunta.r3 %}
+                        <li class="list-group-item">{{ pregunta.r3 }}</li>
+                    {% endif %}
+                    {% if pregunta.r4 %}
+                        <li class="list-group-item">{{ pregunta.r4 }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
