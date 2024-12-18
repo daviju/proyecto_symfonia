@@ -6,6 +6,7 @@ use App\Entity\Pregunta;
 use App\Entity\Respuesta;
 use App\Form\PreguntaType;
 use App\Repository\PreguntaRepository;
+use App\Repository\RespuestaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,10 +103,16 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/preguntas/show/{id}', name: 'admin_preguntas_show')]
-    public function show(Pregunta $pregunta): Response
-    {
+    public function show(
+        Pregunta $pregunta, 
+        RespuestaRepository $respuestaRepository
+    ): Response {
+        // Contar respuestas por opción
+        $respuestas = $respuestaRepository->countRespuestasByPregunta($pregunta);
+    
         return $this->render('admin/preguntas/show.html.twig', [
             'pregunta' => $pregunta,
+            'respuestas' => $respuestas
         ]);
     }
 }

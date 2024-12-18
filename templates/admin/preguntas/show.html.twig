@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ver Pregunta{% endblock %}
-
 {% block body %}
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -30,7 +28,7 @@
                 </p>
 
                 <h4 class="mt-4">Respuestas</h4>
-                <ul class="list-group">
+                <ul class="list-group mb-4">
                     {% if pregunta.r1 %}
                         <li class="list-group-item">{{ pregunta.r1 }}</li>
                     {% endif %}
@@ -44,7 +42,64 @@
                         <li class="list-group-item">{{ pregunta.r4 }}</li>
                     {% endif %}
                 </ul>
+
+                <h4>Distribución de Respuestas</h4>
+                <canvas id="respuestasChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('respuestasChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        '{{ pregunta.r1 }}', 
+                        '{{ pregunta.r2 }}', 
+                        {% if pregunta.r3 %}'{{ pregunta.r3 }}',{% endif %}
+                        {% if pregunta.r4 %}'{{ pregunta.r4 }}',{% endif %}
+                    ],
+                    datasets: [{
+                        label: 'Número de Respuestas',
+                        data: [
+                            {{ respuestas[1] ?? 0 }}, 
+                            {{ respuestas[2] ?? 0 }}, 
+                            {% if pregunta.r3 %}{{ respuestas[3] ?? 0 }},{% endif %}
+                            {% if pregunta.r4 %}{{ respuestas[4] ?? 0 }}{% endif %}
+                        ],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                            {% if pregunta.r3 %}'rgba(54, 162, 235, 0.6)',{% endif %}
+                            {% if pregunta.r4 %}'rgba(255, 206, 86, 0.6)'{% endif %}
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            {% if pregunta.r3 %}'rgba(54, 162, 235, 1)',{% endif %}
+                            {% if pregunta.r4 %}'rgba(255, 206, 86, 1)'{% endif %}
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}

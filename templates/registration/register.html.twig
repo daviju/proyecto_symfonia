@@ -8,39 +8,74 @@
 
 <style>
     body {
-        background: linear-gradient(to right, #bdc3c7, #2c3e50);
+        background: linear-gradient(135deg, #74b9ff, #a29bfe, #dfe6e9);
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
+        font-family: 'Poppins', sans-serif;
     }
+
     .register-container {
         max-width: 400px;
-        padding: 30px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        border-radius: 15px;
-        background-color: #ffffff;
-        animation: fadeInUp 1s ease-in-out;
+        padding: 40px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: slideIn 1s ease-in-out;
     }
+
     .register-title {
+        font-size: 1.8rem;
+        font-weight: bold;
         text-align: center;
-        margin-bottom: 20px;
         color: #2c3e50;
+        margin-bottom: 30px;
     }
+
+    .form-floating label {
+        color: #636e72;
+    }
+
+    .form-floating input:focus {
+        border-color: #6c5ce7;
+        box-shadow: 0 0 5px rgba(108, 92, 231, 0.5);
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: #2d3436;
+    }
+
     .register-button {
         width: 100%;
-        background-color: #3498db;
+        background: linear-gradient(45deg, #6c5ce7, #74b9ff);
+        color: white;
         border: none;
-        animation: pulse 2s infinite;
+        font-size: 1rem;
+        padding: 10px;
+        transition: all 0.3s ease;
+        border-radius: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
+
     .register-button:hover {
-        background-color: #2980b9;
+        background: linear-gradient(45deg, #74b9ff, #6c5ce7);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
     }
+
     .alert {
         text-align: center;
+        color: #d63031;
+        background: rgba(214, 48, 49, 0.1);
+        border: 1px solid #d63031;
+        border-radius: 10px;
+        padding: 10px;
     }
-    @keyframes fadeInUp {
+
+    @keyframes slideIn {
         from {
             opacity: 0;
             transform: translateY(50px);
@@ -50,25 +85,14 @@
             transform: translateY(0);
         }
     }
-    @keyframes pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
-        }
-        70% {
-            box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
-        }
-    }
 </style>
 
 <div class="register-container">
-    <h1 class="h3 mb-3 font-weight-normal register-title">Register</h1>
+    <h1 class="register-title">Create Your Account</h1>
 
     {{ form_start(registrationForm) }}
         {% if form_errors(registrationForm) %}
-            <div class="alert alert-danger">{{ form_errors(registrationForm) }}</div>
+            <div class="alert">{{ form_errors(registrationForm) }}</div>
         {% endif %}
         
         <div class="form-floating mb-3">
@@ -86,7 +110,11 @@
             {{ form_label(registrationForm.agreeTerms, null, {'attr': {'class': 'form-check-label'}}) }}
         </div>
 
-        <button type="submit" class="btn btn-lg btn-primary register-button">Register</button>
+        <div class="text-center mt-3">
+            <p>¿Ya tienes cuenta? <a href="{{ path('app_login') }}">Inicia sesión</a></p>
+        </div>
+
+        <button type="submit" class="btn btn-lg register-button">Sign Up</button>
     {{ form_end(registrationForm) }}
 </div>
 {% endblock %}

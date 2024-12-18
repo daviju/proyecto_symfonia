@@ -7,130 +7,105 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
 <style>
-    body, html {
-        height: 100%;
+    body {
+        background: linear-gradient(to right, #A6C1EE, #D3BDFE);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
         margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #000;
-        overflow: hidden;
+        font-family: Arial, sans-serif;
     }
-    .bg-video {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        height: 100%;
-        min-width: 100%;
-        min-height: 100%;
-        z-index: -1;
-        transform: translate(-50%, -50%);
-        object-fit: cover;
-        opacity: 1;
-        visibility: visible;
-    }
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5); /* Opcional: para hacer el texto más legible */
-        z-index: 0;
-    }
+
     .login-container {
         max-width: 400px;
         padding: 30px;
-        margin: 100px auto;
-        background-color: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        border-radius: 15px;
-        z-index: 1;
-        position: relative;
-        animation: fadeInUp 1s ease-in-out;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
     }
+
     .login-title {
-        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
         margin-bottom: 20px;
-        color: #2c3e50;
+        color: #333333;
     }
-    .login-button {
+
+    .btn-primary, .btn-logout {
         width: 100%;
-        background-color: #3498db;
+        padding: 10px;
         border: none;
-        animation: pulse 2s infinite;
+        background: linear-gradient(to right, #8E44AD, #3498DB);
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s ease;
     }
-    .login-button:hover {
-        background-color: #2980b9;
+
+    .btn-primary:hover, .btn-logout:hover {
+        background: linear-gradient(to right, #6D358C, #2C80B9);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
-    .alert {
-        text-align: center;
+
+    .form-floating label {
+        color: #777777;
     }
-    .logout-link {
-        color: #3498db;
-        text-decoration: none;
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: #555555;
     }
-    .logout-link:hover {
-        text-decoration: underline;
-    }
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    @keyframes pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
-        }
-        70% {
-            box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
-        }
+
+    .logout-section {
+        margin-top: 20px;
     }
 </style>
 
-<video autoplay muted loop class="bg-video">
-    <source src="public/videos/fondovideo.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-</video>
-
-<div class="overlay"></div>
-
 <div class="login-container">
-    <h1 class="h3 mb-3 font-weight-normal login-title">Please sign in</h1>
+    {% if app.user %}
+        <!-- Usuario logueado -->
+        <h1 class="login-title">Welcome, {{ app.user.userIdentifier }}</h1>
+        <div class="logout-section">
+            <form method="post" action="{{ path('app_logout') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                <button class="btn btn-logout" type="submit">Logout</button>
+            </form>
+        </div>
+    {% else %}
+        <!-- Formulario de Login -->
+        <h1 class="login-title">Log In to Your Account</h1>
 
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+        <form method="post" action="{{ path('app_login') }}">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="logout-link">Logout</a>
+            <div class="form-floating mb-3">
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                <label for="inputEmail">Email</label>
             </div>
-        {% endif %}
 
-        <div class="form-floating mb-3">
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-            <label for="inputEmail">Email</label>
-        </div>
+            <div class="form-floating mb-3">
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <label for="inputPassword">Password</label>
+            </div>
 
-        <div class="form-floating mb-3">
-            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-            <label for="inputPassword">Password</label>
-        </div>
+            <div class="form-check mb-3 text-start">
+                <input class="form-check-input" type="checkbox" name="_remember_me" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Remember Me</label>
+            </div>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="text-center mt-3">
+                <p>¿No tienes cuenta? <a href="{{ path('app_register') }}">Regístrate</a></p>
+            </div>
 
-        <button class="btn btn-lg btn-primary login-button" type="submit">
-            Sign in
-        </button>
-    </form>
+            <!-- CSRF Token -->
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+    {% endif %}
 </div>
 {% endblock %}

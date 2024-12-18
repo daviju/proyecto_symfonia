@@ -19,3 +19,7 @@ services:
     App\Repository\PreguntaRepository:
         autowire: true
         autoconfigure: true
+
+    App\Repository\RespuestaRepository:
+        autowire: true
+        autoconfigure: true

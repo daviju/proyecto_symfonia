@@ -3,59 +3,64 @@
 {% block title %}Editar Pregunta{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="display-4 text-primary">Editar Pregunta</h1>
-            <div>
-                <a href="{{ path('admin_preguntas_show', { id: pregunta.id }) }}" class="btn btn-secondary btn-lg shadow me-2">
-                    <i class="bi bi-arrow-left"></i> Volver
-                </a>
-            </div>
+<div class="container mt-4">
+    <h1 class="mb-4">Editar Pregunta</h1>
+
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+    
+    <div class="form-group mb-3">
+        {{ form_label(form.titulo, 'Título de la Pregunta') }}
+        {{ form_widget(form.titulo, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.titulo) }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.fecha_inicio, 'Fecha de Inicio') }}
+            {{ form_widget(form.fecha_inicio, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.fecha_inicio) }}
         </div>
 
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="card-title">Editar: {{ pregunta.titulo }}</h3>
-
-                {{ form_start(form) }}
-                    <div class="mb-3">
-                        {{ form_label(form.titulo) }}
-                        {{ form_widget(form.titulo, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.fechaInicio) }}
-                        {{ form_widget(form.fechaInicio, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.fechaFin) }}
-                        {{ form_widget(form.fechaFin, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.r1) }}
-                        {{ form_widget(form.r1, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.r2) }}
-                        {{ form_widget(form.r2, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.r3) }}
-                        {{ form_widget(form.r3, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.r4) }}
-                        {{ form_widget(form.r4, { 'attr': { 'class': 'form-control' } }) }}
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg shadow">Guardar cambios</button>
-                {{ form_end(form) }}
-            </div>
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.fecha_fin, 'Fecha de Fin') }}
+            {{ form_widget(form.fecha_fin, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.fecha_fin) }}
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.r1, 'Respuesta 1') }}
+            {{ form_widget(form.r1, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.r1) }}
+        </div>
+
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.r2, 'Respuesta 2') }}
+            {{ form_widget(form.r2, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.r2) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.r3, 'Respuesta 3') }}
+            {{ form_widget(form.r3, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.r3) }}
+        </div>
+
+        <div class="col-md-6 form-group mb-3">
+            {{ form_label(form.r4, 'Respuesta 4') }}
+            {{ form_widget(form.r4, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.r4) }}
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{{ path('admin_preguntas') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
 {% endblock %}

@@ -22,7 +22,7 @@ class HomeController extends AbstractController
         if ($user && in_array('ROLE_ADMIN', $user->getRoles())) {
             return $this->redirectToRoute('admin_preguntas');
         } elseif ($user && !in_array('ROLE_ADMIN', $user->getRoles())) {
-            return $this->redirectToRoute('user');
+            return $this->redirectToRoute('usuario_preguntas');
         }
 
         return $this->redirectToRoute('app_login');

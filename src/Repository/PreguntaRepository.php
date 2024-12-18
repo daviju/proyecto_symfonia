@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Pregunta;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,18 @@ class PreguntaRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Pregunta::class);
+    }
+
+    public function findActivePreguntasByUser(User $user): array
+    {
+        $currentDate = new \DateTime();
+
+        return $this->createQueryBuilder('p')
+            ->where('p.fecha_inicio <= :currentDate')
+            ->andWhere('p.fecha_fin IS NULL OR p.fecha_fin >= :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
