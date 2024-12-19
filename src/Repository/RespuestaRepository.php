@@ -19,25 +19,28 @@ class RespuestaRepository extends ServiceEntityRepository
         parent::__construct($registry, Respuesta::class);
     }
 
-    public function countRespuestasByPregunta(Pregunta $pregunta): array {
-    $conn = $this->getEntityManager()->getConnection();
+    public function countRespuestasByPregunta(Pregunta $pregunta): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
 
-    $sql = '
-        SELECT respuesta, COUNT(*) as count 
-        FROM respuesta 
-        WHERE pregunta_id = :pregunta_id 
-        GROUP BY respuesta
-    ';
+        $sql = '
+            SELECT respuesta, COUNT(*) as count 
+            FROM respuesta 
+            WHERE pregunta_id = :pregunta_id 
+            AND user_id IS NOT NULL
+            GROUP BY respuesta;
 
-    $resultSet = $conn->executeQuery($sql, ['pregunta_id' => $pregunta->getId()]);
-    
-    $results = [];
-    while ($row = $resultSet->fetchAssociative()) {
-        $results[$row['respuesta']] = $row['count'];
+        ';
+
+        $resultSet = $conn->executeQuery($sql, ['pregunta_id' => $pregunta->getId()]);
+
+        $results = [];
+        while ($row = $resultSet->fetchAssociative()) {
+            $results[$row['respuesta']] = $row['count'];
+        }
+
+        return $results;
     }
-
-    return $results;
-}
 
     //    /**
     //     * @return Respuesta[] Returns an array of Respuesta objects

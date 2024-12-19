@@ -4,15 +4,18 @@ services:
         autoconfigure: true
         public: false
 
+    # Controladores
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    # Autenticadores
     App\Security\AppCustomAuthenticator:
         autowire: true
         autoconfigure: true
         tags: ['security.authenticator']
 
+    # Repositorios
     App\Repository\UserRepository:
         tags: ['doctrine.repository_service']
 
@@ -21,5 +24,15 @@ services:
         autoconfigure: true
 
     App\Repository\RespuestaRepository:
+        autowire: true
+        autoconfigure: true
+
+    # Servicio de Email
+    App\Service\EmailService:
+        autowire: true
+        autoconfigure: true
+
+    # Servicio de PDF
+    App\Service\PdfService:
         autowire: true
         autoconfigure: true
