@@ -109,4 +109,34 @@ class UserController extends AbstractController
         $this->addFlash('success', '¡Respuesta guardada correctamente!');
         return $this->redirectToRoute('usuario_preguntas');
     }
+
+    #[Route('/usuario/pregunta/{id}', name: 'usuario_ver_pregunta')]
+    #[IsGranted('ROLE_USER')]
+    public function verPregunta(
+        Pregunta $pregunta,
+        RespuestaRepository $respuestaRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $user = $this->getUser();
+
+        // Verificar si el usuario ha respondido esta pregunta
+        $respuesta = $respuestaRepository->findOneBy([
+            'pregunta' => $pregunta,
+            'user' => $user
+        ]);
+
+        if (!$respuesta) {
+            $this->addFlash('error', 'No has respondido a esta pregunta.');
+            return $this->redirectToRoute('usuario_preguntas');
+        }
+
+        // Obtener la distribución de respuestas
+        $respuestas = $respuestaRepository->countRespuestasByPregunta($pregunta);
+
+        return $this->render('usuario/preguntas/show.html.twig', [
+            'pregunta' => $pregunta,
+            'respuesta' => $respuesta,
+            'respuestas' => $respuestas
+        ]);
+    }
 }

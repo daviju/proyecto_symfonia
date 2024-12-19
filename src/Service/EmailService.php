@@ -29,57 +29,64 @@ class EmailService
         try {
             // Obtener la URL base del servidor
             $request = $this->requestStack->getCurrentRequest();
-            $baseUrl = $request->getSchemeAndHttpHost(); // Ejemplo: http://127.0.0.1:8000
+            $baseUrl = $request ? $request->getSchemeAndHttpHost() : 'http://default-url.com'; // Valor por defecto si no hay solicitud
 
-            // Leer el archivo de imagen y convertirlo a base64
-            $imagePath = __DIR__ . '/../../public/images/barsinso.jpg'; // Ruta desde public/
-            $imageData = base64_encode(file_get_contents($imagePath));
-            $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+            // Rutas de las imágenes a incluir
+            $images = [
+                'cani' => __DIR__ . '/../../public/images/cani.jpg',
+                'cani2' => __DIR__ . '/../../public/images/cani2.jpg',
+            ];
 
-            // Generar el contenido HTML para el PDF, incluyendo la imagen base64
+            // Convertir las imágenes a base64
+            $imageSrc = [];
+            foreach ($images as $name => $path) {
+                if (file_exists($path)) {
+                    $imageData = base64_encode(file_get_contents($path));
+                    $imageSrc[$name] = 'data:image/jpeg;base64,' . $imageData;
+                }
+            }
+
+            // Generar el contenido HTML para el PDF, incluyendo las imágenes base64
             $html = sprintf(
                 '
             <div style="text-align: center;">
-                <h1>¡Buenos dias mi loco!</h1>
-                <p>Gracias por registrarte.</p>
-                <img src="%s" alt="Imagen de bienvenida" style="width: 300px; height: auto; margin-bottom: 20px;">
-                <br>
+                <h1>Bienvenido ruinero</h1>
+
+                <img src="%s" alt="Cani barroco" style="width: 300px; height: auto; margin-bottom: 20px;">
+                
                 <p>
-                    Con un porrito en la mano yo me lo lío <br>
-                    Con esa raya de coca que me he metido <br>
-                    Me he dado más de mil tirones y no me han cogido <br>
-                    Y el cero noventa y uno pa ti pa mi es pan comido <br>
-                    No tengo miedo los voy a matar <br>
-                    A esos mamones de la policía <br>
-                    Que desde el día que me cogieron <br>
-                    A mi me llevaron pa comisaría <br>
-                    Y yo por ser menor de edad <br>
-                    A mí me dieron la libertad <br>
-                    Vivo en un barrio de vacilillas <br>
-                    Se dan la fuga y a toda pastilla <br>
-                    Vivo en un barrio de vacilones <br>
-                    De mi cuadrilla son todos ladrones <br>
-                    Lerelerele lerelelei <br>
-                    Lerelerele lerelela <br>
-                    Lerelerele lerelelei <br>
-                    Lerelerele lerelela <br>
-                    Lerelerele lerelelei <br>
-                    Y el cero noventa y uno pa ti pa mi es pan comido <br>
-                    Lerelerele lerelela <br>
-                    No tengo miedo los voy a matar <br>
-                    A esos mamones de la policía <br>
-                    Que desde el día que me cogieron <br>
-                    A mí me llevaron pa comisaría <br>
-                    Y yo por ser menor de edad <br>
-                    A mí me dieron la libertad <br>
-                    A mí me dieron la libertad <br>
-                    Lerelerele lerelelei <br>
-                    Lerelerele lerelela <br>
-                    A mi me dieron la libertad <br>
-                    A mí me dieron la libertad <br>
+                    Que pasa loco <br> <br> 
+                    Man decio que ere el numero uno del barrio y quiero que vea er proyecto que tengo <br>
+                    le pueto un surwofe arpine pa ke pete eso ai en er symfony ar masimo <br>
+
+                    <br>
+                    Pero tengo un secretito, que me encanta la cosa der symfony <br>
+                    .... solo ecusharlo .... <br>
+
+                    yo lo flipo con lo repositorio, la entidade, lo metodo, la base de dato, lo adayo, la armonia, lo tempo <br>
                 </p>
+
+                <img src="%s" alt="Imagen de bienvenida" style="width: 300px; height: auto; margin-bottom: 20px;">
+
+                <p>
+                    Yo si ke malegro de aber conosio ar ar kabesa ese que iso symfony, <br>
+
+                    lo repositorio y la base de dato automatica, flipante vamo, flipante <br>
+
+                    <br>
+                    Yo soy programado, pero programado barroco, eso de SpringBoot, Angular, nah <br>
+
+                    eso son... papanata vamo eso no valen ni pa preguntarle ke miren a ve si lluebe
+                </p>
+                
+                <br>
+                
+                <h1>
+                    Yo si ke malegro de aberte conosio Usuario.
+                </h1>
             </div>',
-                $imageSrc
+                $imageSrc['cani'] ?? '', // Mostrar imagen 'cani'
+                $imageSrc['cani2'] ?? ''  // Mostrar imagen 'cani2'
             );
 
             // Generar el PDF utilizando PdfService

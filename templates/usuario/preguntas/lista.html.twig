@@ -14,12 +14,13 @@
     {% else %}
         <div class="list-group">
             {% for pregunta in preguntas %}
-                <div class="list-group-item {% if pregunta.id in respuestasPorPregunta|keys %}disabled{% endif %}">
+                <div class="list-group-item {% if pregunta.id in respuestasPorPregunta|keys %}disabled-visual{% endif %}">
                     <h4>{{ pregunta.titulo }}</h4>
                     {% if pregunta.id not in respuestasPorPregunta|keys %}
                         <a href="{{ path('responder_pregunta', {'id': pregunta.id}) }}" class="btn btn-primary">Responder</a>
                     {% else %}
                         <span class="badge bg-secondary">Ya respondida</span>
+                        <a href="{{ path('usuario_ver_pregunta', {'id': pregunta.id}) }}" class="badge bg-secondary">Ver respuesta</a>
                     {% endif %}
                 </div>
             {% endfor %}
